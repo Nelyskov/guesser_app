@@ -51,3 +51,5 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 frontend/node_modules
+frontend/next.config.js
+frontend/next-env.d.ts
