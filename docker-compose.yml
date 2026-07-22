@@ -26,7 +26,7 @@ services:
     container_name: backend
     restart: unless-stopped
     environment:
-      DB_HOST:     postgres
+      DB_HOST:     pg
       DB_PORT:     5432
       DB_NAME:     price_guesser
       DB_USER:     postgres
@@ -34,7 +34,7 @@ services:
     ports:
       - "7000:8000"
     depends_on:
-      postgres:
+      pg:
         condition: service_healthy
     networks:
       - app_net
@@ -57,13 +57,13 @@ services:
     container_name: parser
     restart: "no"
     environment:
-      DB_HOST:     172.19.0.2
+      DB_HOST:     pg
       DB_PORT:     5432
       DB_NAME:     price_guesser
       DB_USER:     postgres
       DB_PASSWORD: ${DB_PASSWORD:-password}
     depends_on:
-      postgres:
+      pg:
         condition: service_healthy
     networks:
       - app_net
