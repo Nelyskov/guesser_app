@@ -57,7 +57,7 @@ services:
     container_name: parser
     restart: "no"
     environment:
-      DB_HOST:     postgres
+      DB_HOST:     172.19.0.2
       DB_PORT:     5432
       DB_NAME:     price_guesser
       DB_USER:     postgres
