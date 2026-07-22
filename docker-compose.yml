@@ -3,8 +3,8 @@ version: "3.9"
 services:
 
   postgres:
-    image: postgres:16-alpine
-    container_name: pg
+    image: postgres
+    container_name: postgres
     restart: unless-stopped
     environment:
       POSTGRES_DB:       price_guesser
@@ -26,7 +26,7 @@ services:
     container_name: backend
     restart: unless-stopped
     environment:
-      DB_HOST:     pg
+      DB_HOST:     postgres
       DB_PORT:     5432
       DB_NAME:     price_guesser
       DB_USER:     postgres
@@ -34,7 +34,7 @@ services:
     ports:
       - "7000:8000"
     depends_on:
-      pg:
+      postgres:
         condition: service_healthy
     networks:
       - app_net
@@ -57,7 +57,7 @@ services:
     container_name: parser
     restart: "no"
     environment:
-      DB_HOST:     pg
+      DB_HOST:     postgres
       DB_PORT:     5432
       DB_NAME:     price_guesser
       DB_USER:     postgres
