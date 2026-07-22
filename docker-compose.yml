@@ -32,7 +32,7 @@ services:
       DB_USER:     postgres
       DB_PASSWORD: ${DB_PASSWORD:-password}
     ports:
-      - "8000:8000"
+      - "7000:7000"
     depends_on:
       postgres:
         condition: service_healthy
@@ -45,7 +45,7 @@ services:
     container_name: frontend
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "7001:7001"
     depends_on:
       - backend
     networks:
