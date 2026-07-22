@@ -53,3 +53,4 @@ $RECYCLE.BIN/
 frontend/node_modules
 frontend/next.config.js
 frontend/next-env.d.ts
+frontend/.next
