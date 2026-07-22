@@ -12,7 +12,7 @@ services:
       DB_PORT:     5432
       DB_NAME:     price_guesser
       DB_USER:     postgres
-      DB_PASSWORD: ${DB_PASSWORD:-password}
+      DB_PASSWORD: ${DB_PASSWORD:-8520}
     ports:
       - "7000:8000"
     networks:
@@ -28,7 +28,7 @@ services:
     depends_on:
       - backend
     networks:
-      - app_net
+      - app-network
 
   parser:
     build:
@@ -40,14 +40,11 @@ services:
       DB_PORT:     5432
       DB_NAME:     price_guesser
       DB_USER:     postgres
-      DB_PASSWORD: ${DB_PASSWORD:-password}
+      DB_PASSWORD: ${DB_PASSWORD:-8520}
     networks:
-      - app_net
+      - app-network
     command: tail -f /dev/null
 
-volumes:
-  pg_data:
-
 networks:
-  app_net:
-    driver: bridge
+  app-network:
+    external: true
