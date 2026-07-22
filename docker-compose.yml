@@ -63,7 +63,7 @@ services:
       DB_USER:     postgres
       DB_PASSWORD: ${DB_PASSWORD:-password}
     depends_on:
-      pg:
+      postgres:
         condition: service_healthy
     networks:
       - app_net
