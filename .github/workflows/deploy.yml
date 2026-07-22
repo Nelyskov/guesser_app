@@ -1,0 +1,55 @@
+name: Deploy Price Guesser
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'parser_app/**'
+      - 'price_guesser/**'
+      - 'deploy/**'
+      - '.github/workflows/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host:     ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key:      ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            set -e
+
+            cd /root/guessgame
+            git fetch origin master
+            git reset --hard origin/master
+
+            # Копируем код в папки Docker контекстов
+            cp price_guesser/backend/main.py deploy/backend/main.py
+
+            # Frontend — все нужные файлы
+            rsync -a --delete \
+              price_guesser/frontend/app \
+              price_guesser/frontend/lib \
+              price_guesser/frontend/package.json \
+              price_guesser/frontend/tsconfig.json \
+              price_guesser/frontend/tailwind.config.ts \
+              price_guesser/frontend/postcss.config.js \
+              deploy/frontend/
+
+            # Parser — код парсеров
+            cp parser_app/face_filter.py deploy/parser/face_filter.py
+            cp parser_app/db.py          deploy/parser/db.py
+            rsync -a --delete parser_app/parsers/ deploy/parser/parsers/
+
+            # Пересобираем и запускаем
+            cd /root/guessgame/deploy
+            docker compose up -d --build
+
+            echo "✓ Deploy completed!"
